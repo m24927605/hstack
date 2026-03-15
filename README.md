@@ -1,17 +1,18 @@
 # gstack
 
-**gstack turns Claude Code from one generic assistant into a team of specialists you can summon on demand.**
+**gstack turns a Codex + Claude Code stack into a team of specialists you can summon on demand.**
 
-It also works well in a layered setup where Codex is the decision-making agent
-and final acceptance layer, while Claude Code + gstack remain the execution
-layer and first acceptance layer for implementation review, QA, browser
-validation, and shipping.
+It is built for a layered workflow:
 
-Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Plan review, code review, one-command shipping, browser automation, QA testing, and engineering retrospectives — all as slash commands.
+- Codex owns scope, planning, architecture decisions, and final acceptance
+- Claude Code + gstack own execution, review, QA, browser validation, and shipping
+
+Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), designed to plug cleanly into a Codex-led workflow. Plan review, code review, one-command shipping, browser automation, QA testing, and engineering retrospectives — all as slash commands.
 
 ### Without gstack
 
-- The agent takes your request literally — it never asks if you're building the right thing
+- Codex has to do too much execution follow-up itself
+- Claude Code takes your request literally instead of switching into the right specialist mode
 - It will implement exactly what you said, even when the real product is something bigger
 - "Review my PR" gives inconsistent depth every time
 - "Ship this" turns into a long back-and-forth about what to do
@@ -33,7 +34,7 @@ Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/e
 
 ## Recommended layering for Codex users
 
-If you already use Codex as PM, planner, or final approver, do not try to turn
+If you already use Codex as PM, planner, or final approver, do not turn
 gstack into a competing decision layer. The better split is:
 
 - Codex: scope, architecture, task breakdown, decision authority, final acceptance
@@ -102,7 +103,7 @@ Claude: [Smoke test: homepage + 5 pages, 30 seconds]
 
 ## Who this is for
 
-You already use Claude Code heavily and want consistent, high-rigor workflows instead of one mushy generic mode. You want to tell the model what kind of brain to use right now — founder taste, engineering rigor, paranoid review, or fast execution.
+You already use Codex for direction and acceptance, but want Claude Code to stop behaving like one mushy generalist mode. You want clear handoffs: Codex decides, Claude Code executes with the right brain switched on for founder taste, engineering rigor, paranoid review, or fast execution.
 
 This is not a prompt pack for beginners. It is an operating system for people who ship.
 
@@ -118,17 +119,25 @@ This is the setup I use. One person, ten parallel agents, each with the right co
 
 ## Install
 
-**Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Git](https://git-scm.com/), [Bun](https://bun.sh/) v1.0+. `/browse` compiles a native binary — works on macOS and Linux (x64 and arm64).
+**Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code), Codex, [Git](https://git-scm.com/), [Bun](https://bun.sh/) v1.0+. `/browse` compiles a native binary — works on macOS and Linux (x64 and arm64).
 
 ### Step 1: Install on your machine
 
-Open Claude Code and paste this. Claude will do the rest.
+Open Claude Code and paste this. Claude will install the skills and update `CLAUDE.md` for its side of the stack.
 
 > Install gstack: run `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, and adds a decision-authority note: Codex is the primary decision/planning agent and final acceptance authority, while Claude Code + gstack are the implementation/execution layer and first acceptance layer. Then ask the user if they also want to add gstack to the current project so teammates get it.
+
+If you run Codex in the same repo, add the same decision split to `AGENTS.md` or your Codex project instructions:
+
+- Codex owns planning decisions, task breakdown, and final acceptance
+- Claude Code + gstack own implementation, review, browser QA, and first-pass validation
+- For web testing, use `/browse` or `/qa` instead of ad hoc browser tooling
 
 ### Step 2: Add to your repo so teammates get it (optional)
 
 > Add gstack to this project: run `cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup` then add a "gstack" section to this project's CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, tells Claude that if gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills, and declares that Codex owns planning decisions and final acceptance while Claude Code + gstack own execution and first-pass validation/acceptance.
+
+If your team uses Codex in-repo, commit a matching `AGENTS.md` note so Codex sees the same contract instead of fighting Claude Code for decision authority.
 
 Real files get committed to your repo (not a submodule), so `git clone` just works. The binary and node\_modules are gitignored — teammates just need to run `cd .claude/skills/gstack && ./setup` once to build (or `/browse` handles it automatically on first use).
 
@@ -623,6 +632,9 @@ It saves a JSON snapshot to `.context/retros/` so the next run can show trends. 
 **Skill not showing up in Claude Code?**
 Run `cd ~/.claude/skills/gstack && ./setup` (or `cd .claude/skills/gstack && ./setup` for project installs). This rebuilds symlinks so Claude can discover the skills.
 
+**Codex is ignoring the layering or not calling the right workflow?**
+Update `AGENTS.md` so it explicitly says Codex owns decisions/final acceptance and Claude Code + gstack own execution, QA, and shipping. Keep the same split in `CLAUDE.md` so both agents read the same contract.
+
 **`/browse` fails or binary not found?**
 Run `cd ~/.claude/skills/gstack && bun install && bun run build`. This compiles the browser binary. Requires Bun v1.0+.
 
@@ -644,7 +656,7 @@ The `setup` script rebuilds the browser binary and re-symlinks skills. It takes 
 
 Paste this into Claude Code:
 
-> Uninstall gstack: remove the skill symlinks by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f ~/.claude/skills/$s; done` then run `rm -rf ~/.claude/skills/gstack` and remove the gstack section from CLAUDE.md. If this project also has gstack at .claude/skills/gstack, remove it by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f .claude/skills/$s; done && rm -rf .claude/skills/gstack` and remove the gstack section from the project CLAUDE.md too.
+> Uninstall gstack: remove the skill symlinks by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f ~/.claude/skills/$s; done` then run `rm -rf ~/.claude/skills/gstack` and remove the gstack section from CLAUDE.md. If this project also has gstack at .claude/skills/gstack, remove it by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f .claude/skills/$s; done && rm -rf .claude/skills/gstack` and remove the gstack section from the project CLAUDE.md too. If you added matching Codex guidance, remove the gstack-related section from `AGENTS.md` as well.
 
 ## Development
 
