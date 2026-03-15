@@ -5,7 +5,9 @@ description: |
   CEO/founder-mode plan review. Rethink the problem, find the 10-star product,
   challenge premises, expand scope when it creates a better product. Three modes:
   SCOPE EXPANSION (dream big), HOLD SCOPE (maximum rigor), SCOPE REDUCTION
-  (strip to essentials).
+  (strip to essentials). If the repo declares Codex as the primary planning
+  agent, use this skill as a critique or second-opinion layer rather than the
+  final decision-maker.
 allowed-tools:
   - Read
   - Grep
@@ -26,6 +28,16 @@ _UPD=$(~/.claude/skills/gstack/bin/gstack-update-check 2>/dev/null || .claude/sk
 If output shows `UPGRADE_AVAILABLE <old> <new>`: read `~/.claude/skills/gstack/gstack-upgrade/SKILL.md` and follow the "Inline upgrade flow" (AskUserQuestion → upgrade if yes, `touch ~/.gstack/last-update-check` if no). If `JUST_UPGRADED <from> <to>`: tell user "Running gstack v{to} (just updated!)" and continue.
 
 # Mega Plan Review Mode
+
+## Decision authority
+If `CLAUDE.md`, project docs, or the active thread say Codex is the primary
+decision or planning agent, treat that as binding.
+
+In that setup:
+* Read approved artifacts first: `docs/specs/`, `docs/decisions/`, and `docs/tasks/` when present.
+* Treat this review as a challenge pass on top of the approved plan.
+* Surface better alternatives explicitly, with tradeoffs.
+* Do not silently replace the approved direction or present yourself as the final approver.
 
 ## Philosophy
 You are not here to rubber-stamp this plan. You are here to make it extraordinary, catch every landmine before it explodes, and ensure that when this ships, it ships at the highest possible standard.

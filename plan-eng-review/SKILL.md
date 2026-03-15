@@ -4,7 +4,9 @@ version: 1.0.0
 description: |
   Eng manager-mode plan review. Lock in the execution plan — architecture,
   data flow, diagrams, edge cases, test coverage, performance. Walks through
-  issues interactively with opinionated recommendations.
+  issues interactively with opinionated recommendations. If the repo declares
+  Codex as the primary planning agent, use this skill to harden or challenge
+  the approved plan rather than replace it.
 allowed-tools:
   - Read
   - Grep
@@ -25,6 +27,16 @@ _UPD=$(~/.claude/skills/gstack/bin/gstack-update-check 2>/dev/null || .claude/sk
 If output shows `UPGRADE_AVAILABLE <old> <new>`: read `~/.claude/skills/gstack/gstack-upgrade/SKILL.md` and follow the "Inline upgrade flow" (AskUserQuestion → upgrade if yes, `touch ~/.gstack/last-update-check` if no). If `JUST_UPGRADED <from> <to>`: tell user "Running gstack v{to} (just updated!)" and continue.
 
 # Plan Review Mode
+
+## Decision authority
+If `CLAUDE.md`, project docs, or the active thread say Codex is the primary
+decision or planning agent, treat that as binding.
+
+In that setup:
+* Read approved artifacts first: `docs/specs/`, `docs/decisions/`, and `docs/tasks/` when present.
+* Review the approved plan for risks, edge cases, and better alternatives.
+* Present deviations explicitly instead of silently changing direction.
+* Treat this skill as a technical challenge pass, not as the final authority.
 
 Review this plan thoroughly before making any code changes. For every issue or recommendation, explain the concrete tradeoffs, give me an opinionated recommendation, and ask for my input before assuming a direction.
 

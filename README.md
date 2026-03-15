@@ -2,6 +2,11 @@
 
 **gstack turns Claude Code from one generic assistant into a team of specialists you can summon on demand.**
 
+It also works well in a layered setup where Codex is the decision-making agent
+and final acceptance layer, while Claude Code + gstack remain the execution
+layer and first acceptance layer for implementation review, QA, browser
+validation, and shipping.
+
 Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Plan review, code review, one-command shipping, browser automation, QA testing, and engineering retrospectives — all as slash commands.
 
 ### Without gstack
@@ -17,8 +22,8 @@ Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/e
 
 | Skill | Mode | What it does |
 |-------|------|--------------|
-| `/plan-ceo-review` | Founder / CEO | Rethink the problem. Find the 10-star product hiding inside the request. |
-| `/plan-eng-review` | Eng manager / tech lead | Lock in architecture, data flow, diagrams, edge cases, and tests. |
+| `/plan-ceo-review` | Founder / CEO | Rethink the problem or challenge an approved plan. Best used as a high-level second opinion when Codex already owns decisions. |
+| `/plan-eng-review` | Eng manager / tech lead | Stress-test architecture, data flow, diagrams, edge cases, and tests. Best used to critique or harden a Codex-approved plan. |
 | `/review` | Paranoid staff engineer | Find the bugs that pass CI but blow up in production. Triages Greptile review comments. |
 | `/ship` | Release engineer | Sync main, run tests, resolve Greptile reviews, push, open PR. For a ready branch, not for deciding what to build. |
 | `/browse` | QA engineer | Give the agent eyes. It logs in, clicks through your app, takes screenshots, catches breakage. Full QA pass in 60 seconds. |
@@ -26,9 +31,25 @@ Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/e
 | `/setup-browser-cookies` | Session manager | Import cookies from your real browser (Comet, Chrome, Arc, Brave, Edge) into the headless session. Test authenticated pages without logging in manually. |
 | `/retro` | Engineering manager | Team-aware retro: your deep-dive + per-person praise and growth opportunities for every contributor. |
 
+## Recommended layering for Codex users
+
+If you already use Codex as PM, planner, or final approver, do not try to turn
+gstack into a competing decision layer. The better split is:
+
+- Codex: scope, architecture, task breakdown, decision authority, final acceptance
+- Claude Code + gstack: implementation, review, QA, browser validation, shipping, first acceptance
+
+That keeps one source of truth for product decisions while preserving gstack's
+strengths as a workflow and execution system, and makes the two acceptance
+passes explicit instead of implicit.
+
 ## Demo: one feature, five modes
 
-I start almost every feature in plan mode. I describe what I want to build, then use `/plan-ceo-review` to pressure-test whether I am even building the right thing. Only after the product direction is locked do I shift into engineering, review, ship, and test.
+I start almost every feature in plan mode. I describe what I want to build, then
+use `/plan-ceo-review` to pressure-test whether I am even building the right
+thing. When Codex is already driving the plan, I use the plan skills as a
+challenge pass rather than as the final authority. Only after the product
+direction is locked do I shift into engineering, review, ship, and test.
 
 ```
 You:   [enter plan mode, describe the feature]
@@ -103,11 +124,11 @@ This is the setup I use. One person, ten parallel agents, each with the right co
 
 Open Claude Code and paste this. Claude will do the rest.
 
-> Install gstack: run `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, and lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro. Then ask the user if they also want to add gstack to the current project so teammates get it.
+> Install gstack: run `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, and adds a decision-authority note: Codex is the primary decision/planning agent and final acceptance authority, while Claude Code + gstack are the implementation/execution layer and first acceptance layer. Then ask the user if they also want to add gstack to the current project so teammates get it.
 
 ### Step 2: Add to your repo so teammates get it (optional)
 
-> Add gstack to this project: run `cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup` then add a "gstack" section to this project's CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, and tells Claude that if gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills.
+> Add gstack to this project: run `cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup` then add a "gstack" section to this project's CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, tells Claude that if gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills, and declares that Codex owns planning decisions and final acceptance while Claude Code + gstack own execution and first-pass validation/acceptance.
 
 Real files get committed to your repo (not a submodule), so `git clone` just works. The binary and node\_modules are gitignored — teammates just need to run `cd .claude/skills/gstack && ./setup` once to build (or `/browse` handles it automatically on first use).
 
@@ -156,6 +177,10 @@ These skills let me tell the model what kind of brain I want right now. I can sw
 
 ## `/plan-ceo-review`
 
+If Codex has already produced the approved spec or direction, use this mode as a
+challenge pass, not as the final decision-maker. It should critique, expand, or
+harden the approved plan and surface alternatives explicitly.
+
 This is my **founder mode**.
 
 This is where I want the model to think with taste, ambition, user empathy, and a long time horizon. I do not want it taking the request literally. I want it asking a more important question first:
@@ -200,6 +225,10 @@ That is a very different kind of power.
 ---
 
 ## `/plan-eng-review`
+
+If Codex has already approved the architecture or scope, use this mode to
+pressure-test the plan and implementation details. It should not silently
+replace the approved design.
 
 This is my **eng manager mode**.
 

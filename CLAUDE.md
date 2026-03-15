@@ -64,6 +64,41 @@ SKILL.md files are **generated** from `.tmpl` templates. To update docs:
 To add a new browse command: add it to `browse/src/commands.ts` and rebuild.
 To add a snapshot flag: add it to `SNAPSHOT_FLAGS` in `browse/src/snapshot.ts` and rebuild.
 
+## Decision authority
+
+Codex is the primary decision and planning agent for this project, and the final
+acceptance authority.
+
+Claude Code and gstack are the implementation and execution layer, and they keep
+their original first-pass validation and acceptance responsibilities. When there
+is ambiguity, do not silently redefine product scope, architecture direction, or
+acceptance criteria on your own.
+
+Before proposing or implementing material changes, check these sources of truth
+in order if they exist:
+
+1. `docs/specs/`
+2. `docs/decisions/`
+3. `docs/tasks/`
+4. The latest user-approved plan in the current thread
+
+If you think a better design exists, present it explicitly as an alternative with
+tradeoffs. Do not silently replace the approved plan.
+
+## Execution workflow
+
+Use this project with a layered workflow:
+
+1. Codex defines or approves the spec, architecture, task breakdown, and acceptance criteria.
+2. Claude Code implements against those artifacts.
+3. Claude Code and gstack perform the first acceptance pass through review, QA, browser checks, and shipping validation.
+4. Codex performs the final acceptance pass against the approved artifacts.
+
+`/plan-ceo-review` and `/plan-eng-review` are not the source of truth when Codex
+has already produced an approved plan. In that situation, use them as a second
+opinion, critique, or challenge pass, then return the alternatives to Codex or
+the user for final judgment.
+
 ## Browser interaction
 
 When you need to interact with a browser (QA, dogfooding, cookie setup), use the
