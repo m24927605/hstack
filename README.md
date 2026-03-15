@@ -1,15 +1,15 @@
-# gstack
+# hstack
 
-**gstack turns a Codex + Claude Code stack into a team of specialists you can summon on demand.**
+**hstack turns a Codex + Claude Code stack into a team of specialists you can summon on demand.**
 
 It is built for a layered workflow:
 
 - Codex owns scope, planning, architecture decisions, and final acceptance
-- Claude Code + gstack own execution, review, QA, browser validation, and shipping
+- Claude Code + hstack own execution, review, QA, browser validation, and shipping
 
 Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), designed to plug cleanly into a Codex-led workflow. Plan review, code review, one-command shipping, browser automation, QA testing, and engineering retrospectives — all as slash commands.
 
-### Without gstack
+### Without hstack
 
 - Codex has to do too much execution follow-up itself
 - Claude Code takes your request literally instead of switching into the right specialist mode
@@ -19,7 +19,7 @@ Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/e
 - The agent can write code but can't see your app — it's half blind
 - You still do QA by hand: open browser, click around, check pages, squint at layouts
 
-### With gstack
+### With hstack
 
 | Skill | Mode | What it does |
 |-------|------|--------------|
@@ -35,12 +35,12 @@ Eight opinionated workflow skills for [Claude Code](https://docs.anthropic.com/e
 ## Recommended layering for Codex users
 
 If you already use Codex as PM, planner, or final approver, do not turn
-gstack into a competing decision layer. The better split is:
+hstack into a competing decision layer. The better split is:
 
 - Codex: scope, architecture, task breakdown, decision authority, final acceptance
-- Claude Code + gstack: implementation, review, QA, browser validation, shipping, first acceptance
+- Claude Code + hstack: implementation, review, QA, browser validation, shipping, first acceptance
 
-That keeps one source of truth for product decisions while preserving gstack's
+That keeps one source of truth for product decisions while preserving hstack's
 strengths as a workflow and execution system, and makes the two acceptance
 passes explicit instead of implicit.
 
@@ -109,7 +109,7 @@ This is not a prompt pack for beginners. It is an operating system for people wh
 
 ## How to fly: 10 sessions at once
 
-gstack is powerful with one Claude Code session. It is transformative with ten.
+hstack is powerful with one Claude Code session. It is transformative with ten.
 
 [Conductor](https://conductor.build) runs multiple Claude Code sessions in parallel — each in its own isolated workspace. That means you can have one session running `/qa` on staging, another doing `/review` on a PR, a third implementing a feature, and seven more working on other branches. All at the same time.
 
@@ -125,17 +125,17 @@ This is the setup I use. One person, ten parallel agents, each with the right co
 
 Open Claude Code and paste this. Claude will install the skills and update `CLAUDE.md` for its side of the stack.
 
-> Install gstack: run `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, and adds a decision-authority note: Codex is the primary decision/planning agent and final acceptance authority, while Claude Code + gstack are the implementation/execution layer and first acceptance layer. Then ask the user if they also want to add gstack to the current project so teammates get it.
+> Install hstack: run `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` then add a "hstack" section to CLAUDE.md that says to use the /browse skill from hstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, and adds a decision-authority note: Codex is the primary decision/planning agent and final acceptance authority, while Claude Code + hstack are the implementation/execution layer and first acceptance layer. Then ask the user if they also want to add hstack to the current project so teammates get it.
 
 If you run Codex in the same repo, add the same decision split to `AGENTS.md` or your Codex project instructions:
 
 - Codex owns planning decisions, task breakdown, and final acceptance
-- Claude Code + gstack own implementation, review, browser QA, and first-pass validation
+- Claude Code + hstack own implementation, review, browser QA, and first-pass validation
 - For web testing, use `/browse` or `/qa` instead of ad hoc browser tooling
 
 ### Step 2: Add to your repo so teammates get it (optional)
 
-> Add gstack to this project: run `cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup` then add a "gstack" section to this project's CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, tells Claude that if gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills, and declares that Codex owns planning decisions and final acceptance while Claude Code + gstack own execution and first-pass validation/acceptance.
+> Add hstack to this project: run `cp -Rf ~/.claude/skills/gstack .claude/skills/gstack && rm -rf .claude/skills/gstack/.git && cd .claude/skills/gstack && ./setup` then add a "hstack" section to this project's CLAUDE.md that says to use the /browse skill from hstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, lists the available skills: /plan-ceo-review, /plan-eng-review, /review, /ship, /browse, /qa, /setup-browser-cookies, /retro, tells Claude that if hstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills, and declares that Codex owns planning decisions and final acceptance while Claude Code + hstack own execution and first-pass validation/acceptance.
 
 If your team uses Codex in-repo, commit a matching `AGENTS.md` note so Codex sees the same contract instead of fighting Claude Code for decision authority.
 
@@ -174,7 +174,7 @@ Everything lives inside `.claude/`. Nothing touches your PATH or runs in the bac
 
 Created by [Garry Tan](https://x.com/garrytan), President & CEO of [Y Combinator](https://www.ycombinator.com/).
 
-I built gstack because I do not want AI coding tools stuck in one mushy mode.
+I built hstack because I do not want AI coding tools stuck in one mushy mode.
 
 Planning is not review. Review is not shipping. Founder taste is not engineering rigor. If you blur all of that together, you usually get a mediocre blend of all four.
 
@@ -380,11 +380,11 @@ I want the plane landed.
 
 [Greptile](https://greptile.com) is a YC company that reviews your PRs automatically. It catches real bugs — race conditions, security issues, things that pass CI and blow up in production. It has genuinely saved my ass more than once. I love these guys.
 
-**Setup:** Install Greptile on your GitHub repo at [greptile.com](https://greptile.com) — it takes about 30 seconds. Once it's reviewing your PRs, gstack picks up its comments automatically. No additional configuration.
+**Setup:** Install Greptile on your GitHub repo at [greptile.com](https://greptile.com) — it takes about 30 seconds. Once it's reviewing your PRs, hstack picks up its comments automatically. No additional configuration.
 
 The problem with any automated reviewer is triage. Greptile is good, but not every comment is a real issue. Some are false positives. Some flag things you already fixed three commits ago. Without a triage layer, the comments pile up and you start ignoring them — which defeats the purpose.
 
-gstack solves this. `/review` and `/ship` are now Greptile-aware. They read Greptile's comments, classify each one, and take action:
+hstack solves this. `/review` and `/ship` are now Greptile-aware. They read Greptile's comments, classify each one, and take action:
 
 - **Valid issues** get added to the critical findings and fixed before shipping
 - **Already-fixed issues** get an auto-reply acknowledging the catch
@@ -633,7 +633,7 @@ It saves a JSON snapshot to `.context/retros/` so the next run can show trends. 
 Run `cd ~/.claude/skills/gstack && ./setup` (or `cd .claude/skills/gstack && ./setup` for project installs). This rebuilds symlinks so Claude can discover the skills.
 
 **Codex is ignoring the layering or not calling the right workflow?**
-Update `AGENTS.md` so it explicitly says Codex owns decisions/final acceptance and Claude Code + gstack own execution, QA, and shipping. Keep the same split in `CLAUDE.md` so both agents read the same contract.
+Update `AGENTS.md` so it explicitly says Codex owns decisions/final acceptance and Claude Code + hstack own execution, QA, and shipping. Keep the same split in `CLAUDE.md` so both agents read the same contract.
 
 **`/browse` fails or binary not found?**
 Run `cd ~/.claude/skills/gstack && bun install && bun run build`. This compiles the browser binary. Requires Bun v1.0+.
@@ -656,7 +656,7 @@ The `setup` script rebuilds the browser binary and re-symlinks skills. It takes 
 
 Paste this into Claude Code:
 
-> Uninstall gstack: remove the skill symlinks by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f ~/.claude/skills/$s; done` then run `rm -rf ~/.claude/skills/gstack` and remove the gstack section from CLAUDE.md. If this project also has gstack at .claude/skills/gstack, remove it by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f .claude/skills/$s; done && rm -rf .claude/skills/gstack` and remove the gstack section from the project CLAUDE.md too. If you added matching Codex guidance, remove the gstack-related section from `AGENTS.md` as well.
+> Uninstall hstack: remove the skill symlinks by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f ~/.claude/skills/$s; done` then run `rm -rf ~/.claude/skills/gstack` and remove the hstack section from CLAUDE.md. If this project also has hstack at .claude/skills/gstack, remove it by running `for s in browse plan-ceo-review plan-eng-review review ship retro qa setup-browser-cookies; do rm -f .claude/skills/$s; done && rm -rf .claude/skills/gstack` and remove the hstack section from the project CLAUDE.md too. If you added matching Codex guidance, remove the hstack-related section from `AGENTS.md` as well.
 
 ## Development
 

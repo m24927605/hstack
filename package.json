@@ -1,7 +1,7 @@
 {
-  "name": "gstack",
+  "name": "hstack",
   "version": "0.3.3",
-  "description": "Garry's Stack — Claude Code skills + fast headless browser. One repo, one install, entire AI engineering workflow.",
+  "description": "hstack — Codex + Claude Code skills with a fast headless browser for the full AI engineering workflow.",
   "license": "MIT",
   "type": "module",
   "bin": {
